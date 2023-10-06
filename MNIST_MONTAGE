@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_openml
+
+# Load the MNIST dataset
+mnist = fetch_openml("mnist_784", version=1)
+images = mnist.data.to_numpy()
+labels = mnist.target.to_numpy().astype(int)
+
+# Create a montage of the first 25 images
+montage = np.zeros((5 * 28, 5 * 28), dtype=np.uint8)
+
+for i in range(25):
+    img = images[i].reshape(28, 28)
+    row = (i // 5) * 28
+    col = (i % 5) * 28
+    montage[row:row + 28, col:col + 28] = img
+
+# Display the montage
+plt.figure(figsize=(6, 6))
+plt.imshow(montage, cmap='gray')
+plt.title("MNIST Montage")
+plt.axis('off')
+plt.show()
