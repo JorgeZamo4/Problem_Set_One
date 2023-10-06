@@ -65,5 +65,5 @@ Future work could involve:
 
 ---
 
-*John Doe* \
+*Jorge Zamorano* \
 *Date: October 5, 2023*
