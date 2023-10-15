@@ -1,29 +1,27 @@
-import tensorflow as tf
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import accuracy_score
 from tensorflow.keras.datasets import mnist
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
 
 # Load the MNIST dataset
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-# Normalize pixel values to be between 0 and 1
-x_train, x_test = x_train / 255.0, x_test / 255.0
+# Flatten the images
+x_train = x_train.reshape(-1, 28 * 28)
+x_test = x_test.reshape(-1, 28 * 28)
 
-# Create a simple neural network model
-model = Sequential([
-    Flatten(input_shape=(28, 28)),
-    Dense(128, activation='relu'),
-    Dense(10, activation='softmax')
-])
+# Create a linear regression model
+model = LinearRegression()
 
-# Compile the model
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
+# Fit the model to the training data
+model.fit(x_train, y_train)
 
-# Train the model
-model.fit(x_train, y_train, epochs=5)
+# Predict the labels for the test data
+y_pred = model.predict(x_test)
 
-# Evaluate the model on the test data
-test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=2)
-print(f'Test accuracy: {test_accuracy*100:.2f}%')
+# Convert predictions to integers (since MNIST labels are integers)
+y_pred = y_pred.astype(int)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy * 100:.2f}%")
